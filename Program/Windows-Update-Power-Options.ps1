@@ -1,5 +1,5 @@
 # Configuration.
-$version = "2.1.0"
+$version = "2.2.0"
 $regPath = "HKLM:\SOFTWARE\Microsoft\WindowsUpdate\Orchestrator"
 $regName = "ShutdownFlyoutOptions"
 $targetValue = 5
@@ -23,7 +23,7 @@ $confirmation = Read-Host "Are you sure you want to run this script? (Y/N)"
 
 if ($confirmation -ne 'Y' -and $confirmation -ne 'y') {
     Write-Host "Operation cancelled by user." -ForegroundColor Yellow
-    Start-Sleep -Seconds 2
+    pause
     exit
 }
 
