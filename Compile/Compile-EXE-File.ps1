@@ -1,6 +1,6 @@
 # Variables
-$inputFile = "$PSScriptRoot\Windows-Update-Power-Options.ps1"
-$outputFile = "$PSScriptRoot\Windows-Update-Power-Options.exe"
+$inputFile = Join-Path -Path $PSScriptRoot -ChildPath "..\Program\Windows-Update-Power-Options.ps1"
+$outputFile = Join-Path -Path $PSScriptRoot -ChildPath "..\Program\Windows-Update-Power-Options.exe"
 
 # Check if input file exists.
 if (-not (Test-Path $inputFile)) {
