@@ -1,0 +1,40 @@
+# Variables
+$inputFile = "$PSScriptRoot\Windows-Update-Power-Options.ps1"
+$outputFile = "$PSScriptRoot\Windows-Update-Power-Options.exe"
+
+# Check if input file exists.
+if (-not (Test-Path $inputFile)) {
+    Write-Error "Input file not found: $inputFile"
+    Write-Host "Press any key to exit..."
+    $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
+    exit
+}
+
+Write-Host "Compiling 'Windows-Update-Power-Options.ps1' to EXE file..."
+
+# Allow running the script.
+Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process -Force
+
+# Import module and install if missing.
+if (-not (Get-Module -ListAvailable -Name ps2exe)) {
+    Write-Host "ps2exe module not found. Installing..."
+    $ProgressPreference = 'SilentlyContinue'
+    Install-Module -Name ps2exe -Scope CurrentUser -Force
+    $ProgressPreference = 'Continue'
+}
+Import-Module ps2exe
+
+# Compile.
+Invoke-PS2EXE -InputFile $inputFile `
+              -OutputFile $outputFile `
+              -RequireAdmin
+
+# Result.
+if (Test-Path $outputFile) {
+    Write-Host "Success! EXE created at: $outputFile" -ForegroundColor Green
+} else {
+    Write-Error "Compilation failed."
+}
+
+Write-Host "Press any key to exit..."
+$null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
