@@ -15,7 +15,16 @@ $logPath = Join-Path -Path $basePath -ChildPath "Windows-Update-Power-Options.lo
 $actionTaken = "Unknown"
 $errorOccurred = $false
 
-Write-Host "Windows-Update-Power-Options Version 1.0.0"
+Write-Host "Windows-Update-Power-Options Version 2.0.0"
+
+# Confirmation.
+$confirmation = Read-Host "Are you sure you want to run this script? (Y/N)"
+
+if ($confirmation -ne 'Y' -and $confirmation -ne 'y') {
+    Write-Host "Operation cancelled by user." -ForegroundColor Yellow
+    Start-Sleep -Seconds 2
+    exit
+}
 
 try {
     # Ensure the Registry Path exists.
