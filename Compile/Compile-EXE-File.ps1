@@ -17,7 +17,6 @@ if (Test-Path $configFile) {
 $inputFile = Join-Path -Path $PSScriptRoot -ChildPath "..\Program\Windows-Update-Power-Options.ps1"
 $outputFile = Join-Path -Path $PSScriptRoot -ChildPath "..\Program\Windows-Update-Power-Options_$version.exe"
 
-
 # Check if input file exists.
 if (-not (Test-Path $inputFile)) {
     Write-Error "Input file not found: $inputFile"
