@@ -1,6 +1,22 @@
-# Variables
+# Configuration.
+$configFile = Join-Path -Path $PSScriptRoot -ChildPath "..\Info.conf"
+
+$version = "Unknown"
+if (Test-Path $configFile) {
+    $rawLine = (Get-Content -Path $configFile -TotalCount 1).Trim()
+    
+    if ($rawLine -match '(?i)version\s*=\s*"?([^"\s]+)"?') {
+        $version = $Matches[1]
+    } else {
+        $version = $rawLine -replace '[\s"=\\]', ''
+    }
+} else {
+    Write-Host "Warning: Info.conf not found at $configFile. Using default version string." -ForegroundColor Yellow
+}
+
 $inputFile = Join-Path -Path $PSScriptRoot -ChildPath "..\Program\Windows-Update-Power-Options.ps1"
-$outputFile = Join-Path -Path $PSScriptRoot -ChildPath "..\Program\Windows-Update-Power-Options.exe"
+$outputFile = Join-Path -Path $PSScriptRoot -ChildPath "..\Program\Windows-Update-Power-Options_$version.exe"
+
 
 # Check if input file exists.
 if (-not (Test-Path $inputFile)) {

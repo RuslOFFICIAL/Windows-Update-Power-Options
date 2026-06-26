@@ -1,5 +1,19 @@
 # Configuration.
-$version = "3.0-1.1"
+$configFile = Join-Path -Path $PSScriptRoot -ChildPath "..\Info.conf"
+
+$version = "Unknown"
+if (Test-Path $configFile) {
+    $rawLine = (Get-Content -Path $configFile -TotalCount 1).Trim()
+    
+    if ($rawLine -match '(?i)version\s*=\s*"?([^"\s]+)"?') {
+        $version = $Matches[1]
+    } else {
+        $version = $rawLine -replace '[\s"=\\]', ''
+    }
+} else {
+    Write-Host "Warning: Info.conf not found at $configFile. Using default version string." -ForegroundColor Yellow
+}
+
 $regPath = "HKLM:\SOFTWARE\Microsoft\WindowsUpdate\Orchestrator"
 $regName = "ShutdownFlyoutOptions"
 $targetValue = 5
