@@ -1,5 +1,6 @@
 # Configuration.
-$configFile = Join-Path -Path $PSScriptRoot -ChildPath "..\Info.conf"
+$baseDir = if ($null -ne $ScriptRoot) { $ScriptRoot } else { [System.AppDomain]::CurrentDomain.BaseDirectory }
+$configFile = Join-Path -Path $baseDir -ChildPath "..\Info.conf"
 
 $version = "Unknown"
 if (Test-Path $configFile) {
@@ -30,21 +31,21 @@ if (-not $isAdmin) {
 # Log file location.
 $loggedInUser = (Get-CimInstance Win32_ComputerSystem).UserName -replace '.*\\'
 if ($loggedInUser) {
-	$basePath = "C:\Users\$loggedInUser\AppData\Local\Temp\R&C\Windows-Update-Power-Options"
+	$basePath = "C:\Users\$loggedInUser\AppData\Local\Temp\R&C\WUPMC"
 } else {
-	$basePath = Join-Path -Path $env:LOCALAPPDATA -ChildPath "Temp\R&C\Windows-Update-Power-Options"
+	$basePath = Join-Path -Path $env:LOCALAPPDATA -ChildPath "Temp\R&C\WUPMC"
 }
 if (-not (Test-Path $basePath)) {
     New-Item -Path $basePath -ItemType Directory -Force | Out-Null
 }
 
-$logPath = Join-Path -Path $basePath -ChildPath "Windows-Update-Power-Options.log"
+$logPath = Join-Path -Path $basePath -ChildPath "WUPMC.log"
 
 # Initialize variables.
 $actionTaken = "Unknown"
 $errorOccurred = $false
 
-Write-Host "Windows-Update-Power-Options Version $version"
+Write-Host "Windows-Update-Power-Menu-Configurator (WUPMC) Version $version"
 
 # Confirmation.
 $confirmation = Read-Host "Are you sure you want to run this script? (Y/N)"
@@ -55,6 +56,7 @@ if ($confirmation -ne 'Y' -and $confirmation -ne 'y') {
     exit
 }
 
+# Main process.
 try {
     # Ensure the Registry Path exists.
     if (-not (Test-Path $regPath)) {
@@ -106,12 +108,12 @@ catch {
         # Fallback: Write to Windows Event Log.
         Write-Host "Failed to write to log file. Writing to Event Log instead..." -ForegroundColor Red
         try {
-            if (-not [System.Diagnostics.EventLog]::SourceExists("Windows-Update-Power-Options_Error-Log")) {
-                New-EventLog -LogName Application -Source "Windows-Update-Power-Options_Error-Log" -ErrorAction SilentlyContinue
+            if (-not [System.Diagnostics.EventLog]::SourceExists("WUPMC_Error-Log")) {
+                New-EventLog -LogName Application -Source "WUPMC_Error-Log" -ErrorAction SilentlyContinue
             }
-            Write-EventLog -LogName Application -Source "Windows-Update-Power-Options_Error-Log" -EntryType Error -EventId 1000 -Message "Script Error: $errorMsg"
+            Write-EventLog -LogName Application -Source "WUPMC_Error-Log" -EntryType Error -EventId 1000 -Message "Script Error: $errorMsg"
             Write-Host "Error written to Windows Event Viewer." -ForegroundColor Red
-	    Write-Host "Event log is named: Windows-Update-Power-Options_Error-Log"
+	    Write-Host "Event log is named: WUPMC_Error-Log"
         }
         catch {
             Write-Host "CRITICAL: Could not write to file OR Event Log. Error: $($_.Exception.Message)" -ForegroundColor DarkRed

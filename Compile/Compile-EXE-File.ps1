@@ -14,8 +14,8 @@ if (Test-Path $configFile) {
     Write-Host "Warning: Info.conf not found at $configFile. Using default version string." -ForegroundColor Yellow
 }
 
-$inputFile = Join-Path -Path $PSScriptRoot -ChildPath "..\Program\Windows-Update-Power-Options.ps1"
-$outputFile = Join-Path -Path $PSScriptRoot -ChildPath "..\Program\Windows-Update-Power-Options_$version.exe"
+$inputFile = Join-Path -Path $PSScriptRoot -ChildPath "..\Program\WUPMC.ps1"
+$outputFile = Join-Path -Path $PSScriptRoot -ChildPath "..\Program\WUPMC_$version.exe"
 
 # Check if input file exists.
 if (-not (Test-Path $inputFile)) {
@@ -25,7 +25,7 @@ if (-not (Test-Path $inputFile)) {
     exit
 }
 
-Write-Host "Compiling 'Windows-Update-Power-Options.ps1' to EXE file..."
+Write-Host "Compiling 'WUPMC.ps1' to EXE file..."
 
 # Allow running the script.
 Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process -Force
