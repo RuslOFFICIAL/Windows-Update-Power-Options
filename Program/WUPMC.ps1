@@ -1,5 +1,5 @@
 # Configuration.
-$baseDir = if ($null -ne $ScriptRoot) { $ScriptRoot } else { [System.AppDomain]::CurrentDomain.BaseDirectory }
+$baseDir = if ($null -ne $ScriptRoot) { $ScriptRoot } else { if ($null -ne $PSScriptRoot) { $PSScriptRoot } else { [System.AppDomain]::CurrentDomain.BaseDirectory } }
 $configFile = Join-Path -Path $baseDir -ChildPath "..\Info.conf"
 
 $version = "Unknown"
