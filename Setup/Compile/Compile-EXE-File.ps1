@@ -1,5 +1,5 @@
 # Configuration.
-$configFile = Join-Path -Path $PSScriptRoot -ChildPath "..\Info.conf"
+$configFile = Join-Path -Path $PSScriptRoot -ChildPath "..\..\Info.conf"
 
 $version = "Unknown"
 if (Test-Path $configFile) {
@@ -14,8 +14,8 @@ if (Test-Path $configFile) {
     Write-Host "Warning: Info.conf not found at $configFile. Using default version string." -ForegroundColor Yellow
 }
 
-$inputFile = Join-Path -Path $PSScriptRoot -ChildPath "..\Program\WUPMC.ps1"
-$outputFile = Join-Path -Path $PSScriptRoot -ChildPath "..\Program\WUPMC_$version.exe"
+$inputFile = Join-Path -Path $PSScriptRoot -ChildPath "..\..\Program\WUPMC.ps1"
+$outputFile = Join-Path -Path $PSScriptRoot -ChildPath "..\..\Program\WUPMC_$version.exe"
 
 # Check if input file exists.
 if (-not (Test-Path $inputFile)) {
